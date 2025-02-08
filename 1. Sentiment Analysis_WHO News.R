@@ -1,3 +1,9 @@
+###############################################################
+## Title: Sentiment Analysis - WHO News
+## Author: Panji Al 'Alam
+## Email: panjialalam@outlook.com
+################################################################
+
 library(tidyverse)
 library(rvest)
 library(tidytext)
@@ -5,6 +11,10 @@ library(textdata)
 library(sentimentr)
 library(readr)
 library(countrycode)
+
+##--------------------------------------------------------------
+## Section 1: Data Preparation
+##--------------------------------------------------------------
 
 read_path <- "/Users/panjialalam/Documents/GitHub/2.-Web-Scraping-and-Text-Sentiment-Analysis/"
 text <- read_lines(paste0(read_path, "vol101_1_publichealthroundup.txt"))
@@ -19,6 +29,10 @@ text_words <- unnest_tokens(text_df, word_tokens,  text, token = "words")
 sentiment_nrc   <- get_sentiments("nrc") |> rename(nrc = sentiment)
 sentiment_afinn <- get_sentiments("afinn") |> rename(afinn = value)
 sentiment_bing  <- get_sentiments("bing") |> rename(bing = sentiment)
+
+##--------------------------------------------------------------
+## Section 2: Set Up Bigrams and Words
+##--------------------------------------------------------------
 
 # Bigrams to check for any valence shifter
 bigrams_text <- unnest_tokens(text_df, bigrams, text, token = "ngrams", n = 2)
@@ -51,6 +65,10 @@ freq_words <- text_words |>
   summarise(num = n())
 
 slice_max(freq_words, order_by = num, n = 5)
+
+##--------------------------------------------------------------
+## Section 3: Sentiment Analysis (NRC, AFINN, BING, SentimentR)
+##--------------------------------------------------------------
 
 # NRC
 q1_nrc <- ggplot(filter(text_words_joined, !is.na(nrc))) +

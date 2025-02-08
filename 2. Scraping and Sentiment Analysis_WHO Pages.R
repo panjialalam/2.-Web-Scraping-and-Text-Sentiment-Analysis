@@ -1,3 +1,9 @@
+###############################################################
+## Title: Scraping and Sentiment Analysis - WHO Articles (Africa)
+## Author: Panji Al 'Alam
+## Email: panjialalam@outlook.com
+################################################################
+
 library(tidyverse)
 library(rvest)
 library(dplyr)
@@ -7,7 +13,9 @@ library(udpipe)
 
 path <- "/Users/panjialalam/Documents/GitHub/2.-Web-Scraping-and-Text-Sentiment-Analysis/Saved articles/"
 
-# WEB SCRAPING
+##--------------------------------------------------------------
+## Section 1: Web Scraping
+##--------------------------------------------------------------
 
 # Functions starts here
 get_articles <- function(input_year, input_month) {
@@ -119,7 +127,10 @@ get_articles <- function(input_year, input_month) {
 # Test the function
 get_articles(2024, 1)
 
-# SENTIMENT ANALYSIS (OVERALL)
+##--------------------------------------------------------------
+## Section 2: Set Up Lemmas and Words
+##--------------------------------------------------------------
+
 text_path <- "/Users/panjialalam/Documents/GitHub/2.-Web-Scraping-and-Text-Sentiment-Analysis/Saved articles/"
 full_text <- read_lines(paste0(text_path, "All WHO Article from today to 2024-1.txt"))
 full_text_df <- data.frame(text = full_text)
@@ -150,6 +161,11 @@ bigrams_full_sep <- bigrams_full |>
     word1 == "not" & bing == "negative" ~ "positive",
     TRUE ~ bing
   ))
+
+
+##--------------------------------------------------------------
+## Section 3: Sentiment Analysis
+##--------------------------------------------------------------
 
 # Sentiment analysis on word level
 word_lemmas <- full_lemmas |>
@@ -206,7 +222,9 @@ afinn_words <- word_lemmas_joined |>
 
 summary(afinn_words)
 
-# SENTIMENT ANALYSIS (COUNTRY: UGANDA)
+##--------------------------------------------------------------
+## Section 4: Sentiment Analysis (A Specific Country)
+##--------------------------------------------------------------
 
 # A function to get an article with a country in the title
 article_country <- function(input_country) {
